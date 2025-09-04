@@ -24,9 +24,18 @@ def main():
     parser.add_argument('--batch', action='store_true', help='Batch-Verarbeitung aktivieren')
     parser.add_argument('--config', type=str, help='Pfad zur Konfigurationsdatei')
     parser.add_argument('--output', type=str, help='Exportverzeichnis')
+
+    parser.add_argument('--predict-image', type=str, help='Pfad zu einem Graustufenbild (28x28) für Fashion-MNIST Inferenz')
+    parser.add_argument('--model-path', type=str, default='project_analysis/fashion_mnist_cnn.pth', help='Pfad zum trainierten Fashion-MNIST Modell')
     args = parser.parse_args()
 
     try:
+        # Fashion-MNIST Inferenz
+        if args.predict_image:
+            from project_analysis.fashion_mnist_infer import predict_image_file
+            predict_image_file(args.model_path, args.predict_image)
+            return
+
         config = Config(args.config) if args.config else Config()
         engine = FashionDesignEngine(config)
         if args.batch:
